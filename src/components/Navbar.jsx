@@ -21,8 +21,10 @@ const Navbar = () => {
     // -- PROFILE Y LOGOUT
     // const token = true
     /* ****** UserContext ****** */
-    const {token, logout} = useContext(UserContext)
-    console.log("valor del token:", token)
+    // const {token, logout} = useContext(UserContext)
+    const {isAuthenticated, logout} = useContext(UserContext)
+    // console.log("valor del token:", token)
+    console.log("valor del isAuthenticated:", isAuthenticated)
 
     return(
         <nav className="navbar">
@@ -35,7 +37,8 @@ const Navbar = () => {
                     <Link to="/" className="link-opcion" >&#x1F355; Home</Link>
                     {/* <a href="" className="link-opcion" >&#x1F355; Home</a> */}
                     {/* SE RENDERIZA LAS OPCIONES DE USUARIO SEGÚN CORRESPONDA */}
-                    {token ? <UsarioLogueado logout={logout}/> : <UsarioNoLogueado />}
+                    {/* {token ? <UsarioLogueado logout={logout}/> : <UsarioNoLogueado />} */}
+                    {isAuthenticated ? <UsarioLogueado logout={logout}/> : <UsarioNoLogueado />}
 
                 </div>
             </article>

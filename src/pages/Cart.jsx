@@ -54,7 +54,8 @@ const Cart = () => {
     const {cart, setCart} = useContext(CartContext)
 
     /* ****** UserContext ****** */
-    const {token} = useContext(UserContext)
+    // const {token} = useContext(UserContext)
+    const {isAuthenticated} = useContext(UserContext)
 
     /* ESTADO PARA MANIPULAR EL ARREGLO DE PIZZAS EN EL CARRITO DE COMPRAS */
     // const [cartLocal, setCartLocal] = useState(pizzaCart)
@@ -111,7 +112,8 @@ const Cart = () => {
                     }
                 </h2>
                 {/* IR A PAGAR */}
-                {token && <button className="button-add-carro">Pagar</button>}
+                {/* {token && <button className="button-add-carro">Pagar</button>} */}
+                {isAuthenticated && <button className="button-add-carro">Pagar</button>}
                 
 
             </section>

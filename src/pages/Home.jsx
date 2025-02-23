@@ -11,7 +11,7 @@ const getPizzas = async (setPizzas, setMyError) => {
         const url = "http://localhost:5000/api/pizzas"
         const response = await fetch(url)
         // console.log(response)
-        if (!response.ok) { // SE CONSULTA POR EL PROPIEDAD ok DE response
+        if (!response.ok) { // SE CONSULTA POR LA PROPIEDAD ok DE response
             throw new Error(`Hubo un error en la consulta a la API - Status: ${response.status}`);
             
         }
@@ -22,7 +22,7 @@ const getPizzas = async (setPizzas, setMyError) => {
             setPizzas(dataPizzas)
             // console.log(dataPizzas)
             setMyError("")
-        } else { // EN CASO QUE HAYA NO INFORMACION dataPizzas
+        } else { // EN CASO QUE NO HAYA INFORMACION dataPizzas
             throw new Error("No data found in API response")                
         }                        
     } catch (error) {

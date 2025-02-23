@@ -19,6 +19,7 @@ import { useContext } from 'react'
 function App() {
   /* ****** UserContext ****** */
   const {token} = useContext(UserContext)
+  const {isAuthenticated} = useContext(UserContext)
   return (
     <section className="layout">
       {/* SIEMPRE SE MOSTRARAN LOS COMPONENTES NAVBAR & FOOTER */}
@@ -30,17 +31,16 @@ function App() {
             {/* *** Home *** */}
             <Route path='/' element={<Home />} />
             {/* *** RegisterPage *** */}
-            <Route path='/register' element={!token ? <RegisterPage /> : <Navigate to='/' />} />
+            <Route path='/register' element={!isAuthenticated ? <RegisterPage /> : <Navigate to='/' />} />
             {/* *** LoginPage *** */}
-            <Route path='/login' element={!token ? <LoginPage /> : <Navigate to='/' />} />
+            {/* <Route path='/login' element={!isAuthenticated ? <LoginPage /> : <Navigate to='/' />} /> */}
+            <Route path='/login' element={!isAuthenticated ? <LoginPage /> : <Navigate to='/profile' />} />
             {/* *** Cart *** */}
             <Route path='/cart' element={<Cart />} />
             {/* *** Pizza *** */}
-            {/* <Route path='/pizza/p001' element={<Pizza />} /> */}
             <Route path='/pizza/:id' element={<Pizza />} />
             {/* *** ProfilePage *** */}
-            {/* <Route path='/profile' element={<ProfilePage /> } /> */}
-            <Route path='/profile' element={token ? <ProfilePage /> : <Navigate to='/login' />} />
+            <Route path='/profile' element={isAuthenticated ? <ProfilePage /> : <Navigate to='/login' />} />
             {/* *** NotFound *** */}
             {/* <Route path='/404' element={<NotFound />} /> */}
             {/* El componente Navigate permite redireccionar una ruta */}
