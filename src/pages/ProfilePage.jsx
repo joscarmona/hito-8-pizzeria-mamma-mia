@@ -11,7 +11,7 @@ const ProfilePage = () => {
     /* Endpoint para el profile */
     const url = "http://localhost:5000/api/auth/me"
 
-    /* Se utiliza el hook useEffect para hacer una petición a la ruta /api/auth/me mediante el método profile al cargar el componente */
+    /* Se utiliza el hook useEffect para hacer una petición a la ruta /api/auth/me mediante el método profile al cargar el componente profile */
     useEffect(() => {
         // Se obtiene el token del localStorage
         const token = localStorage.getItem("token")

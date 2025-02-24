@@ -54,11 +54,9 @@ const Cart = () => {
     const {cart, setCart} = useContext(CartContext)
 
     /* ****** UserContext ****** */
-    // const {token} = useContext(UserContext)
-    const {isAuthenticated} = useContext(UserContext)
+    const { isAuthenticated, errorMessage, setErrorMessage} = useContext(UserContext)
 
     /* ESTADO PARA MANIPULAR EL ARREGLO DE PIZZAS EN EL CARRITO DE COMPRAS */
-    // const [cartLocal, setCartLocal] = useState(pizzaCart)
     const [cartLocal, setCartLocal] = useState(cart)
 
     {/* RENDERIZAR LA INFORMACIÓN DE CADA PIZZA QUE SE ENCUENTRA EN EL CARRITO DE COMPRAS */}
@@ -77,17 +75,45 @@ const Cart = () => {
             <article className="pizza-price-count-container">
                 {/* PRECIO DE LA PIZZA */}
                 <p>{"$" + price.toLocaleString('es-CL')}</p>
-                {/* <p>{"$" + pizzaPrice.toLocaleString('es-CL')}</p> */}
                 {/* BOTÓN DE DECREMENTAR, PERMITE DISMINUIR LA CANTIDAD DE PIZZAS EN EL CARRITO Y SI LA CANTIDAD ES CERO ELIMINA LA PIZZA DEL CARRITO */}
                 <button className="dec-button" onClick={() => decPizzaCount(cartLocal, setCartLocal, pizza, cart, setCart)}>-</button>
                 {/* MUESTRA LA CANTIDAD DE PIZZAS EN EL CARRITO */}
-                {/* <p>{count}</p> */}
-                {}
                 <p>{count}</p>
                 {/* BOTÓN DE INCREMENTAR, PERMITE AUMENTAR LA CANTIDAD DE PIZZAS EN EL CARRITO */}
                 <button className="inc-button" onClick={() => incPizzaCount(cartLocal, setCartLocal, pizza, cart, setCart)}>+</button>
             </article>
         </li>
+    }
+
+    /* Método para enviar el carrito de compras al backend */
+    const url = "http://localhost:5000/api/checkout"
+    const handleCart = async () => {
+        // Se almacena el token que será enviado
+        const cartToken = localStorage.getItem('token')
+
+        setErrorMessage('Procesando el pago de la compra...')
+
+        const response = await fetch("http://localhost:5000/api/checkouts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cartToken}`,
+            },
+            body: JSON.stringify({
+                cart: cart.map((item) => ({ pizza: item.name, count: item.count, price: item.price }))
+            }),
+        })
+
+        // console.log(response)
+        // console.log("response status property", response.status)
+        const data = await response.json()
+        // console.log(data)
+        // setCart([])
+        // setCartLocal([])
+        if (data?.error)
+            setErrorMessage(data.error)
+        else
+            setErrorMessage('Su compra ha sido realizada exitosamente!')
     }
 
     return (
@@ -98,24 +124,17 @@ const Cart = () => {
                 <ul className="products-to-buy">
                     {/* SE RENDERIZA LA INFORMACIÓN DE CADA PIZZA QUE SE ENCUENTRA EN EL CARRITO DE COMPRAS */}
                     {cartLocal.map(renderPizzaInCart)}
-                    {/* ************************************ */}
-                    
-                    {/* ************************************ */}
                 </ul>
                 {/* TOTAL A PAGAR */}
                 <h2>
                     Total: ${
                         /* EL MÉTODO .REDUCE() EJECUTA UN FUNCIÓN REDUCTORA POR CADA ELEMENTO*/
-                        /* array.reduce(function(total, currentValue, currentIndex, arr), initialValue) */
-                        // pizzaCart.reduce(total, 0).toLocaleString('es-CL')
                         cart.reduce(total, 0).toLocaleString('es-CL')
                     }
                 </h2>
                 {/* IR A PAGAR */}
-                {/* {token && <button className="button-add-carro">Pagar</button>} */}
-                {isAuthenticated && <button className="button-add-carro">Pagar</button>}
-                
-
+                {isAuthenticated && <button className="button-add-carro" onClick={handleCart}>Pagar</button>}
+                {errorMessage && <p className="msjCompraExitosa">Su compra ha sido realizada exitosamente!</p>}
             </section>
         </main>
     )

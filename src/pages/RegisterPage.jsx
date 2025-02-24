@@ -1,5 +1,6 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect } from "react"
 import { UserContext } from "../context/UserContext"
+import handleChangeForm from "../hooks/handleChangeForm"
 
 
 /************************************************************** */
@@ -7,30 +8,27 @@ import { UserContext } from "../context/UserContext"
 /************************************************************** */
 const RegisterPage = () => {
     /* UserContext */
-        const { 
-            isAuthenticated,
-            register,
-            user,
-            setUser,
-            errorMessage,
-            setErrorMessage } = useContext(UserContext)
-        /* Endpoint para el register */
-        const url = "http://localhost:5000/api/auth/register"
+    const { 
+        isAuthenticated,
+        register,
+        user,
+        setUser,
+        errorMessage,
+        setErrorMessage } = useContext(UserContext)
+
+    /* Custom hook: handleChangeForm */
+    const { handleChange } = handleChangeForm("")
+
+    /* Endpoint para el register */
+    const url = "http://localhost:5000/api/auth/register"
+    
+    useEffect(() => {
+        /* Se reinicia mensaje de error al cargarse el componente */
+        setErrorMessage("")
+    }, [])
 
         /* ACTUALIZA ESTADOS DEL FORMULARIO */
-    const handleChange = (e) => {
-        const {id, value} = e.target
-
-        setUser((prevUser) => {
-            // SE CHEQUEA ESTADO PREVIO
-            console.log("Estado previo: ", prevUser)
-            return {
-                /* CON EL SPREAD OPERATOR (...) SE PUEDE COPIAR O EXPANDIR ELEMENTOS DE UN OBJETO O DE UN ARREGLO  */
-                ...prevUser,
-                [id]: value
-            }
-        })
-    }
+    
 
     /* ENVIAR FORMULARIO REGISTER */
     const handleSubmit = (e) => {

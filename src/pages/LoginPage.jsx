@@ -1,5 +1,6 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect } from "react"
 import { UserContext } from "../context/UserContext"
+import handleChangeForm from "../hooks/handleChangeForm"
 
 /************************************************************** */
 /* ************************ COMPONENTE ************************ */
@@ -10,25 +11,19 @@ const LoginPage = () => {
         isAuthenticated,
         login,
         user,
-        setUser,
-        errorMessage } = useContext(UserContext)
+        errorMessage,
+        setErrorMessage } = useContext(UserContext)
+
+    /* Custom hook: handleChangeForm */
+    const { handleChange } = handleChangeForm("")
+    
     /* Endpoint para el login */
     const url = "http://localhost:5000/api/auth/login"
 
-    /* ACTUALIZA ESTADOS DEL FORMULARIO */
-    const handleChange = (e) => {
-        const {id, value} = e.target
-
-        setUser((prevUser) => {
-            // SE CHEQUEA ESTADO PREVIO
-            console.log("Estado previo: ", prevUser)
-            return {
-                /* CON EL SPREAD OPERATOR (...) SE PUEDE COPIAR O EXPANDIR ELEMENTOS DE UN OBJETO O DE UN ARREGLO  */
-                ...prevUser,
-                [id]: value
-            }
-        })
-    }
+    useEffect(() => {
+            /* Se reinicia mensaje de error al cargarse el componente */
+            setErrorMessage("")
+    }, [])    
 
     /* ENVIAR FORMULARIO LOGIN */
     const handleSubmit = (e) => {
